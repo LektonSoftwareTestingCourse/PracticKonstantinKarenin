@@ -1,0 +1,18 @@
+# Practice 2: isolated declines and valid financial boundaries.
+# amount = 2000 kopecks; room = limit - already approved usage.
+# Requirements A-02..A-07, A-10 (see ../test-design.md).
+CardStatus: ACTIVE, INACTIVE, BLOCKED, EXPIRED
+Expiry: NEXT_MONTH, THIS_MONTH, PREVIOUS_MONTH
+DailyRoom: 1999, 2000, 2001
+MonthlyRoom: 1999, 2000, 2001
+Balance: 1999, 2000, 2001
+BinLookup: ONLINE, FALLBACK
+
+# C1: isolate status declines from expiry and money declines.
+IF [CardStatus] <> "ACTIVE" THEN [Expiry] = "NEXT_MONTH" AND [DailyRoom] = 2001 AND [MonthlyRoom] = 2001 AND [Balance] = 2001;
+# C2: isolate expiry declines; the date check must actually be reached.
+IF [Expiry] = "PREVIOUS_MONTH" THEN [CardStatus] = "ACTIVE" AND [DailyRoom] = 2001 AND [MonthlyRoom] = 2001 AND [Balance] = 2001;
+# C3/C4: one insufficient financial resource per row.
+# Equalities of other resources remain meaningful positive boundaries.
+IF [DailyRoom] < 2000 THEN [MonthlyRoom] >= 2000 AND [Balance] >= 2000;
+IF [MonthlyRoom] < 2000 THEN [Balance] >= 2000;

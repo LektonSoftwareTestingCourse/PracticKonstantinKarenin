@@ -1,0 +1,14 @@
+# Practice 2: POST /api/cards, requirements C-01 and C-02.
+# All fields are sent explicitly; omitted/default values have separate cases.
+# The ~ prefix keeps invalid inputs out of the positive pairwise pass.
+Bin: FIRST, LAST, ~BAD_LENGTH
+Name: SHORT, MAX_255, ~TOO_LONG
+Currency: RUB, USD, ~BAD_LENGTH
+DailyLimit: ZERO, ONE, NORMAL
+MonthlyLimit: ZERO, ONE, NORMAL
+InitialBalance: ZERO, NORMAL
+
+# C1/C2: at most one invalid format/length per row.
+IF [Bin] = "BAD_LENGTH" THEN [Name] <> "TOO_LONG" AND [Currency] <> "BAD_LENGTH";
+IF [Name] = "TOO_LONG" THEN [Currency] <> "BAD_LENGTH";
+# No monthly >= daily constraint: the specification does not require it.
