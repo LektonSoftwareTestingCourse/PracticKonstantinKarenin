@@ -88,8 +88,18 @@ jobs:
     - name: Run java linter
       run: mvn -f services/pom.xml -P${{ matrix.service }} checkstyle:check
 
-    - name: Build services (tests skipped until students add them)
-      run: mvn -f services/pom.xml -P${{ matrix.service }} install -Dcheckstyle.skip=true -DskipTests
+    - name: Build services and run unit tests
+      run: mvn -B -f services/pom.xml -P${{ matrix.service }} install -Dcheckstyle.skip=true
+
+    - name: Save unit test results and coverage
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: unit-results-${{ matrix.service }}
+        path: |
+          services/${{ matrix.service }}/target/surefire-reports/
+          services/${{ matrix.service }}/target/site/jacoco/
+        if-no-files-found: ignore
 
   frontend-dashboard:
     runs-on: ubuntu-latest
