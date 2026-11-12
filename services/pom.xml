@@ -31,6 +31,8 @@
         <lombok.version>1.18.38</lombok.version>
         <checkstyle.version>3.6.0</checkstyle.version>
         <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
+        <jacoco.version>0.8.12</jacoco.version>
+        <jacocoArgLine/>
         <!-- E2E require docker compose; enabled via -Pe2e-tests -->
         <skipE2eTests>true</skipE2eTests>
     </properties>
@@ -218,6 +220,7 @@
                     <configuration>
                         <configLocation>checkstyle.xml</configLocation>
                         <excludeGeneratedSources>true</excludeGeneratedSources>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
                         <excludes>**/target/**</excludes>
                         <consoleOutput>true</consoleOutput>
                         <failsOnError>true</failsOnError>
@@ -245,6 +248,36 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>@{jacocoArgLine}</argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>unit-coverage-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <propertyName>jacocoArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unit-coverage-report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
