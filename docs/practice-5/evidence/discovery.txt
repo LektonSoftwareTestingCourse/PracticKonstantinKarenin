@@ -1,0 +1,5 @@
+Initial exploratory run: 345 tests, 32 assertion failures, 0 errors.
+Confirmed defect: rollback of 101 after reserving 100 returns 200 and increases original balance from 10000 to 10001 (D-07).
+Confirmed contract gap: direct Switch route accepts a five-digit STAN for an unknown BIN and returns 200/14 (D-13).
+Incorrect test assumptions corrected: CMS masks PAN in errors; deleted cards are hidden; DELETED is not a public card enum; negative limit errors omit the field.
+Fault fixture corrected: Gateway resolves the one-digit port as part of the host; use a five-digit refused port for deterministic connection-refused responses.

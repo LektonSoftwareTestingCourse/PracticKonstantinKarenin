@@ -1,0 +1,132 @@
+# Additional instances make HTTP failure tests reproducible without stopping the working stack.
+services:
+  gateway:
+    build:
+      dockerfile: services/api-tests/Dockerfile.service
+      args:
+        SERVICE: gateway
+    environment:
+      JAVA_TOOL_OPTIONS: -Xmx192m
+  switch:
+    build:
+      dockerfile: services/api-tests/Dockerfile.service
+      args:
+        SERVICE: switch
+    environment:
+      JAVA_TOOL_OPTIONS: -Xmx160m
+  card-management:
+    build:
+      dockerfile: services/api-tests/Dockerfile.service
+      args:
+        SERVICE: card-management
+    environment:
+      JAVA_TOOL_OPTIONS: -Xmx192m
+  authorization:
+    build:
+      dockerfile: services/api-tests/Dockerfile.service
+      args:
+        SERVICE: authorization
+    environment:
+      JAVA_TOOL_OPTIONS: -Xmx160m
+  transaction-logger:
+    build:
+      dockerfile: services/api-tests/Dockerfile.service
+      args:
+        SERVICE: transaction-logger
+    environment:
+      JAVA_TOOL_OPTIONS: -Xmx192m
+  merchant-acquirer:
+    build:
+      dockerfile: services/api-tests/Dockerfile.service
+      args:
+        SERVICE: merchant-acquirer
+    environment:
+      JAVA_TOOL_OPTIONS: -Xmx160m
+  terminal-simulator:
+    build:
+      dockerfile: services/api-tests/Dockerfile.service
+      args:
+        SERVICE: terminal-simulator
+    environment:
+      JAVA_TOOL_OPTIONS: -Xmx160m
+  bin-lookup:
+    build:
+      dockerfile: services/api-tests/Dockerfile.service
+      args:
+        SERVICE: bin-lookup
+    environment:
+      JAVA_TOOL_OPTIONS: -Xmx96m
+  gateway-faults:
+    image: ghcr.io/${GHCR_USER:-local}/smp-gateway:latest
+    pull_policy: never
+    ports:
+      - "28080:8080"
+    environment:
+      JAVA_TOOL_OPTIONS: -Xmx160m
+      SWITCH_URL: http://127.0.0.1:65530
+      CARD_MGMT_URL: http://127.0.0.1:65530
+      AUTH_URL: http://127.0.0.1:65530
+      LOGGER_URL: http://127.0.0.1:65530
+      TERMINAL_SIM_URL: http://127.0.0.1:65530
+      MERCHANT_SIM_URL: http://127.0.0.1:65530
+      TRANSACTIONS_RATE_LIMIT_CAPACITY: 2
+      TRANSACTIONS_RATE_LIMIT_REFILL_PER_SECOND: 1
+    networks:
+      - smp-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+  authorization-faults:
+    image: ghcr.io/${GHCR_USER:-local}/smp-authorization:latest
+    pull_policy: never
+    ports:
+      - "28083:8080"
+    environment:
+      SERVER_PORT: 8080
+      JAVA_TOOL_OPTIONS: -Xmx160m
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      CARD_MGMT_URL: http://127.0.0.1:9
+      BIN_LOOKUP_URL: http://bin-lookup:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - smp-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
+  switch-faults:
+    image: ghcr.io/${GHCR_USER:-local}/smp-switch:latest
+    pull_policy: never
+    ports:
+      - "28082:8080"
+    environment:
+      SERVER_PORT: 8080
+      JAVA_TOOL_OPTIONS: -Xmx160m
+      AUTH_URL: http://authorization:8080
+      LOGGER_URL: http://transaction-logger:8080
+      MERCHANT_URL: http://merchant-acquirer:8080
+      SPRING_RABBITMQ_HOST: 127.0.0.1
+      SPRING_RABBITMQ_PORT: 9
+      SPRING_RABBITMQ_CONNECTION_TIMEOUT: 1000
+    depends_on:
+      - authorization
+      - transaction-logger
+    networks:
+      - smp-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      start_period: 20s
