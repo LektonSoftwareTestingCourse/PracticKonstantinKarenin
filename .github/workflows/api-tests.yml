@@ -1,0 +1,59 @@
+name: Practice 5 API contracts
+
+on:
+  push:
+    branches: ['practice-5', 'practice-5-*', 'main']
+    paths:
+      - 'services/**'
+      - 'docker-compose*.yaml'
+      - '.env.example'
+      - 'scripts/*api*.mjs'
+      - '.github/workflows/api-tests.yml'
+  pull_request:
+    paths:
+      - 'services/**'
+      - 'docker-compose*.yaml'
+      - 'scripts/*api*.mjs'
+      - '.github/workflows/api-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: api-${{ github.repository }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build stack and verify three consecutive runs
+        run: node scripts/run-api-tests.mjs --repeat=3
+      - name: Save container logs
+        if: always()
+        run: |
+          mkdir -p services/api-tests/target
+          docker compose --env-file .env.example -f docker-compose.yaml -f docker-compose.api-tests.yaml logs --no-color > services/api-tests/target/compose.log
+      - name: Upload HTTP evidence and JUnit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-test-reports
+          path: |
+            services/api-tests/target/surefire-reports/
+            services/api-tests/target/*.log
+            docs/practice-5/evidence/
+      - name: Stop test stack
+        if: always()
+        run: docker compose --env-file .env.example -f docker-compose.yaml -f docker-compose.api-tests.yaml down

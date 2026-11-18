@@ -1,0 +1,14 @@
+Tests run: 19, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 14.12 s -- in com.processing.api.AuthorizationTest
+Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.184 s -- in com.processing.api.CardCollectionTest
+Tests run: 32, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.463 s -- in com.processing.api.CardTest
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.663 s -- in com.processing.api.DashboardTest
+Tests run: 20, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.381 s -- in com.processing.api.FundsTest
+Tests run: 45, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.752 s -- in com.processing.api.GatewayValidationTest
+Tests run: 29, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.073 s -- in com.processing.api.InternalValidationTest
+Tests run: 22, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.210 s -- in com.processing.api.LoggerDeliveryTest
+Tests run: 51, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.089 s -- in com.processing.api.LoggerValidationTest
+Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.259 s -- in com.processing.api.MetadataTest
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.526 s -- in com.processing.api.RoutingTest
+Tests run: 40, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.185 s -- in com.processing.api.SearchTest
+Tests run: 23, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.959 s -- in com.processing.api.SimulatorTest
+Tests run: 23, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.296 s -- in com.processing.api.UnavailableServiceTest

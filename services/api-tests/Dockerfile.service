@@ -1,0 +1,7 @@
+# The runner first builds these JARs with Maven/Java 21. This shares its Maven cache with the tests.
+FROM eclipse-temurin:21-jre-alpine
+ARG SERVICE
+WORKDIR /app
+COPY services/${SERVICE}/target/${SERVICE}-1.0.0.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
