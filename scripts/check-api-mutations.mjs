@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { readFileSync, writeFileSync, mkdirSync, readdirSync, copyFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { findMaven } from './api-test-tools.mjs';
@@ -85,7 +85,9 @@ for (const mutation of mutations) {
     if (status === 0 || failures < 1 || errors > 0 || !xml.includes('AssertionError')) {
       throw new Error(`Mutation ${mutation.id} did not cause a clean assertion failure`);
     }
-    copyFileSync(path.join(reports, xmlName), path.join(evidence, `${mutation.id}.xml`));
+    // Normalize Surefire's assertion traces and final newline for pre-commit.
+    const evidenceXml = xml.replace(/\r\n/g, '\n').replace(/[ \t]+$/gm, '').trimEnd() + '\n';
+    writeFileSync(path.join(evidence, `${mutation.id}.xml`), evidenceXml);
     summary.push(`${mutation.id}: KILLED, assertion failures=${failures}, errors=${errors}`);
     writeFileSync(path.join(evidence, 'summary.txt'), summary.join('\n') + '\n');
   } finally {

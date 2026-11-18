@@ -61,7 +61,7 @@
     <property name="java.class.version" value="65.0"/>
   </properties>
   <testcase name="repeatedDeliveryReturnsExistingTransactionWithoutCreatingAnotherRow" classname="com.processing.api.LoggerDeliveryTest" time="2.947">
-    <failure message="1 expectation failed.&#10;Expected status code &lt;200&gt; but was &lt;201&gt;.&#10;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: 
+    <failure message="1 expectation failed.&#10;Expected status code &lt;200&gt; but was &lt;201&gt;.&#10;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError:
 1 expectation failed.
 Expected status code <200> but was <201>.
 

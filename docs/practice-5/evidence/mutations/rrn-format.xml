@@ -61,7 +61,7 @@
     <property name="java.class.version" value="65.0"/>
   </properties>
   <testcase name="directApprovalHasFormattedGeneratedFields" classname="com.processing.api.AuthorizationTest" time="3.107">
-    <failure message="1 expectation failed.&#10;JSON path rrn doesn&apos;t match.&#10;Expected: a string matching the pattern &apos;[0-9]{12}&apos;&#10;  Actual: BROKEN&#10;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: 
+    <failure message="1 expectation failed.&#10;JSON path rrn doesn&apos;t match.&#10;Expected: a string matching the pattern &apos;[0-9]{12}&apos;&#10;  Actual: BROKEN&#10;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError:
 1 expectation failed.
 JSON path rrn doesn't match.
 Expected: a string matching the pattern '[0-9]{12}'

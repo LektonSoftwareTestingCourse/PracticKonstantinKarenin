@@ -90,7 +90,7 @@
   <testcase name="rejectsOneInvalidField(String, Object, String)[28]" classname="com.processing.api.GatewayValidationTest" time="0.036"/>
   <testcase name="rejectsOneInvalidField(String, Object, String)[29]" classname="com.processing.api.GatewayValidationTest" time="0.038"/>
   <testcase name="rejectsOneInvalidField(String, Object, String)[30]" classname="com.processing.api.GatewayValidationTest" time="0.07">
-    <failure message="1 expectation failed.&#10;Expected status code &lt;400&gt; but was &lt;200&gt;.&#10;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: 
+    <failure message="1 expectation failed.&#10;Expected status code &lt;400&gt; but was &lt;200&gt;.&#10;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError:
 1 expectation failed.
 Expected status code <400> but was <200>.
 
